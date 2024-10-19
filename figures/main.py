@@ -63,7 +63,22 @@ def two_pass(B):
 if (__name__=="__main__"):
     image = np.load("ps.npy.txt").astype('uint16')
     splitedimage=two_pass(image)
-    print(splitedimage.max())
-    plt.imshow(splitedimage)
-    plt.show()
+    print("all figures:",splitedimage.max())
+    structsg=np.ones((3,4,6)).astype("uint16")
+    structsv=np.ones((3,6,4)).astype("uint16")
+    b0=0
+    for h in range(0,2):
+        structsg[h+1,h*2:h*2+2,2:4]=0
+        structsv[h+1,2:4,h*2:h*2+2]=0
+    for i in range(structsg.shape[0]):
+        pim=two_pass(binary_erosion(image,structsg[i,:,:]).astype("uint16"))
+        print(structsg[i,:,:],"\n"+str(pim.max()-b0)+"\n")
+        if i==0:
+            b0=pim.max()
+    b0=0
+    for i in range(structsv.shape[0]):
+        pim=two_pass(binary_erosion(image,structsv[i,:,:]).astype("uint16"))
+        print(structsv[i,:,:],"\n"+str(pim.max()-b0)+"\n")
+        if i==0:
+            b0=pim.max()
 
