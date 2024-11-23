@@ -8,7 +8,7 @@ from skimage.segmentation import flood_fill
 from skimage.color import rgb2hsv
 
 if (__name__=="__main__"):
-    image = plt.imread('./balls-and-rects/balls_and_rects.png')
+    image = plt.imread('balls_and_rects.png')
     binary=image.mean(2)
     binary[binary>0]=1
     labeled=label(binary)
@@ -21,7 +21,7 @@ if (__name__=="__main__"):
     colors=np.array(sorted(colors))
     cnum=1
     p=(colors[1:]-colors[:-1]).std()
-    colorssp=[]
+    colorssp=[colors[0]]
     for i in range(1,colors.shape[0]):
         if colors[i]-colors[i-1]>p:
             colorssp.append(colors[i])
