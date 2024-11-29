@@ -17,7 +17,7 @@ regions=regionprops(labeled)
 objects=[]
 for region in regions:
     cx,cy=region.centroid
-    objects.append([[cy,cx]])
+    objects.append([[cx,cy]])
 for file in range(1,100):
     x=np.load(f"./motion/out/h_{file}.npy")
     regions=regionprops(label(x))
@@ -35,12 +35,12 @@ for file in range(1,100):
     ds[np.argmin(ds[:,1])]=100000
     objects[2].append(regions[np.argmin(ds[:,2])].centroid)
     ds[np.argmin(ds[:,2])]=100000
-        
-objects=np.array(objects)
-plt.plot(objects[0,:,0],objects[0,:,1])
-plt.plot(objects[1,:,0],objects[1,:,1])
-plt.plot(objects[2,:,0],objects[2,:,1])
+obs=np.array(objects)
+plt.plot(obs[0,:,0],obs[0,:,1])
+plt.plot(obs[1,:,0],obs[1,:,1])
+plt.plot(obs[2,:,0],obs[2,:,1])
 plt.show()
+
                     
             
         
