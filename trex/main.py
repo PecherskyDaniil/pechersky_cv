@@ -23,7 +23,7 @@ y+=8
 swidth=100
 sheight=40
 sx=80
-tm=-1
+tm=-10
 dc=0
 while True:
     #break
