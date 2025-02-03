@@ -82,7 +82,7 @@ while True:
     contours,_=cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     #здесь обрабатывается frame и на выходе получается результат findContours в переменной contours как показано выше 
     
-    if time.time()-lsttm>3:
+    if time.time()-lsttm>1:
         segments=drawsegments(s,segments,contours)
         lsttm=time.time()
     s.step(0.1)
