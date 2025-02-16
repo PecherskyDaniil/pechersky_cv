@@ -7,20 +7,22 @@ from collections import defaultdict
 from pathlib import Path
 def extractor(region):
     area=(np.sum(region.image)/(region.image.size))
-    kernel=np.ones((3,3),np.uint8)
-    kernel[-1]=0
-    c=len(label(cv2.morphologyEx(region.image.astype(np.uint8),cv2.MORPH_CLOSE,kernel)))/(region.image.shape[0])
     perimeter=(region.perimeter/(region.image.size))
     cy,cx=region.local_centroid
     cy/=region.image.shape[0]
     cx/=region.image.shape[1]
     euler=region.euler_number
+    px=int(region.image.shape[0]/4)
+    py=int(region.image.shape[1]/4)
+    kl=10*np.sum(region.image[px:-px,py:-py])/(region.image.size)
+    pm=(region.image.shape[0]/region.image.shape[1])/2
     eccentricity=region.eccentricity*2
     have_v1=np.sum(np.mean(region.image,0)==1)>2
     have_v2=(np.sum(np.mean(region.image,0)==1)>2)
     have_g1=(np.sum(np.mean(region.image,1)>0.85)>2)*10
     hole_size=np.sum(region.image)/region.filled_area
-    ans=np.array([area,perimeter,cy,cx,euler,eccentricity,have_v1,have_v2,hole_size,have_g1,c**2])
+    solidity=region.solidity
+    ans=np.array([area,perimeter,cy,cx,euler,eccentricity,have_v1,have_v2,hole_size,have_g1,kl,pm,solidity])
     return ans
 
 def classificator(region,classes):
