@@ -8,23 +8,25 @@ from pathlib import Path
 def extractor(region):
     area=(np.sum(region.image)/(region.image.size))
     perimeter=(region.perimeter/(region.image.size))
+    wh=np.sum(region.image[:int(region.image.shape[0]/2)])/np.sum(region.image[int(region.image.shape[0]/2):])
     cy,cx=region.local_centroid
     cy/=region.image.shape[0]
     cx/=region.image.shape[1]
-    euler=region.euler_number*2
+    euler=region.euler_number
     px=int(region.image.shape[0]/5)
     py=int(region.image.shape[1]/5)
     kl=3*np.sum(region.image[px:-px,py:-py])/(region.image.size)
     px=int(region.image.shape[0]*0.45)
     py=int(region.image.shape[1]*0.45)
     kls=2*np.sum(region.image[px:-px,py:-py])/(region.image.size)
-    pm=(region.image.shape[0]/region.image.shape[1])/2
+    pm=(region.image.shape[0]/region.image.shape[1])
     eccentricity=region.eccentricity*8
     have_v1=(np.sum(np.mean(region.image,0)>0.87)>2)*3
     have_g1=(np.sum(np.mean(region.image,1)>0.85)>2)*4
-    hole_size=np.sum(region.image)/region.filled_area
-    solidity=region.solidity
-    ans=np.array([area,perimeter,cy,cx,euler,eccentricity,have_v1,hole_size,have_g1,kl,pm,kls])
+    have_g2=(np.sum(np.mean(region.image,1)>0.5)>2)*5
+    hole_size=(np.sum(region.image)/region.filled_area)
+    solidity=region.solidity*2
+    ans=np.array([area,perimeter,cy,cx,euler,eccentricity,have_v1,hole_size,have_g1,have_g2,kl,pm,kls,solidity,wh])
     return ans
 
 def classificator(region,classes):
@@ -51,7 +53,6 @@ for labelind in range(len(labels)):
             x.append(extractor(regions[0]))
         else:
             x.append(extractor(regions[1]))
-        #print(x[-1])
         y.append(labelind)
 x=np.array(x)
 y=np.array(y)
